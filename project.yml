@@ -1,0 +1,78 @@
+name: Calm
+options:
+  bundleIdPrefix: ${CALM_PREFIX}
+  deploymentTarget:
+    iOS: "17.0"
+settingGroups:
+  common:
+    DEVELOPMENT_TEAM: ${CALM_TEAM}
+    CODE_SIGN_STYLE: Automatic
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    SWIFT_VERSION: "5.0"
+    TARGETED_DEVICE_FAMILY: "1"
+targets:
+  Calm:
+    type: application
+    platform: iOS
+    sources: [Sources, Resources, Shared]
+    dependencies:
+      - target: CalmReport
+        embed: true
+        codeSign: true
+      - target: CalmWidget
+        embed: true
+        codeSign: true
+    entitlements:
+      path: Calm.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        keychain-access-groups: ["$(AppIdentifierPrefix)calm.shared"]
+    info:
+      path: Sources/Info.plist
+      properties:
+        CFBundleDisplayName: Calm
+        CalmKeychainGroup: "$(AppIdentifierPrefix)calm.shared"
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIUserInterfaceStyle: Light
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+    settings:
+      groups: [common]
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ${CALM_PREFIX}.calm
+        INFOPLIST_KEY_CFBundleDisplayName: Calm
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: UIInterfaceOrientationPortrait
+        INFOPLIST_KEY_UIUserInterfaceStyle: Light
+  CalmReport:
+    type: extensionkit-extension
+    platform: iOS
+    sources: [Report]
+    entitlements:
+      path: Report/CalmReport.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+    settings:
+      groups: [common]
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ${CALM_PREFIX}.calm.report
+        INFOPLIST_FILE: Report/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+  CalmWidget:
+    type: app-extension
+    platform: iOS
+    sources: [Widget, Shared]
+    entitlements:
+      path: Widget/CalmWidget.entitlements
+      properties:
+        com.apple.developer.family-controls: true
+        keychain-access-groups: ["$(AppIdentifierPrefix)calm.shared"]
+    settings:
+      groups: [common]
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: ${CALM_PREFIX}.calm.widget
+        INFOPLIST_FILE: Widget/Info.plist
+        GENERATE_INFOPLIST_FILE: NO

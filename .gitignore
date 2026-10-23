@@ -1,0 +1,7 @@
+build/
+build-sim/
+verify/
+*.xcodeproj/
+Resources/icon_ig.png
+Resources/icon_tt.png
+Sources/Info.plist
